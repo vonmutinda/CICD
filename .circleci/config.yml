@@ -8,8 +8,6 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello,"
-    requires:
-      - say-world
   say-world:
     docker:
       - image: cimg/base:stable
@@ -23,3 +21,5 @@ workflows:
     jobs:
       - say-hello
       - say-world
+        requires:
+          - say-hello
