@@ -17,9 +17,9 @@ jobs:
           name: "Say world"
           command: "echo World!"
 workflows:
-  say-hello-workflow:
+  say-hello-world-workflow:
     jobs:
       - say-hello
       - say-world
-        requires:
-          - say-hello
+          requires:
+            - say-hello
