@@ -20,6 +20,6 @@ workflows:
   say-hello-world-workflow:
     jobs:
       - say-hello
-      - say-world
+      - say-world:
           requires:
             - say-hello
