@@ -29,9 +29,8 @@ jobs:
     docker:
       - image: cimg/base::stable
     steps:
-      - run:
-          print_pipeline_id:
-            id: << pipeline.id >>
+      - print_pipeline_id:
+          id: << pipeline.id >>
 workflows:
   say-hello-world-workflow:
     jobs:
