@@ -1,4 +1,13 @@
 version: 2.1 
+
+commands:
+  print_pipeline_id:
+    parameters:
+      id: 
+        type: string
+    steps:
+      run: echo << parameters.id >>
+
 jobs:
   say-hello: 
     docker:
@@ -16,6 +25,13 @@ jobs:
       - run:
           name: "Say world"
           command: echo World! aka ${PLANET_NAME}
+  another_job:
+    docker:
+      - image: cimg/base::stable
+    steps:
+      - run:
+          print_pipeline_id:
+            id: << pipeline.id >>
 workflows:
   say-hello-world-workflow:
     jobs:
@@ -23,3 +39,5 @@ workflows:
       - say-world:
           requires:
             - say-hello
+      - another_job
+      
