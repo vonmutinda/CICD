@@ -27,7 +27,7 @@ jobs:
           command: echo World! aka ${PLANET_NAME}
   another_job:
     docker:
-      - image: cimg/base::stable
+      - image: cimg/base:stable
     steps:
       - print_pipeline_id:
           id: << pipeline.id >>
