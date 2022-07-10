@@ -1,17 +1,17 @@
-version: 2.1 
+version: 2.1
 
 commands:
   print_pipeline_id:
     parameters:
-      id: 
+      id:
         type: string
     steps:
       - run: echo << parameters.id >>
 
 jobs:
-  say-hello: 
+  say-hello:
     docker:
-      - image: cimg/base:stable 
+      - image: cimg/base:stable
     steps:
       - checkout
       - run:
@@ -33,16 +33,32 @@ jobs:
     steps:
       - print_pipeline_id:
           id: << pipeline.id >>
-  
-  failing_job:
+
+  smoke_test:
     docker:
-      - image: cimg/base:stable
+      - image: alpine:latest
     steps:
-      - run: exit 1
+      - run: apk add --update curl
       - run:
-        name: "on error"
-        command: echo "Hello Error!"
-        when: on_fail
+          name: smoke test
+          command: |
+            URL="https://blog.udacity.com/"
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
+
+  # failing_job:
+  #   docker:
+  #     - image: cimg/base:stable
+  #   steps:
+  #     - run: exit 1
+  #     - run:
+  #       name: "on error"
+  #       command: echo "Hello Error!"
+  #       when: on_fail
 
 workflows:
   say-hello-world-workflow:
@@ -52,5 +68,7 @@ workflows:
           requires:
             - say-hello
       - another_job
-      - failing_job
-      
+      - smoke_test:
+          requires:
+            - another-job
+      # - failing_job
