@@ -9,6 +9,8 @@ commands:
       - run: echo << parameters.id >>
 
   destroy_environment:
+    docker:
+      - image: amazon/aws-cli
     steps:
       - run:
           name: Destroy Environment
