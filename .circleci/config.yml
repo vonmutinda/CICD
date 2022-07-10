@@ -70,6 +70,4 @@ workflows:
   setup-infra-workflow:
     jobs:
       - create_infra
-      - smoke_test:
-          requires:
-            - create-infra
+      - smoke_test
