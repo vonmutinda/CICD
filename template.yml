@@ -4,7 +4,7 @@ Resources:
     Properties:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
-      KeyName: user-pro
+      KeyName: vockey
       ImageId: "ami-0729e439b6769d6ab"
 
   InstanceSecurityGroup:
