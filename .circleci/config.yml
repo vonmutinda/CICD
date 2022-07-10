@@ -34,6 +34,17 @@ jobs:
       - print_pipeline_id:
           id: << pipeline.id >>
 
+  create_infra:
+    steps:
+      - checkout
+      - run:
+          name: Create Infra
+          command: |
+            aws cloudformation deploy \
+            --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
+            --template-file template.yml  \
+            --region=us-east-1
+
   smoke_test:
     docker:
       - image: alpine:latest
@@ -41,23 +52,21 @@ jobs:
       - run: apk add --update curl
       - run:
           name: smoke test
+          command: return 1
+      - destroy_environment
+
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy Environment
+          when: on_fail
           command: |
-            URL="https://blog.udacity.co.ke/"
-            if curl -s --head ${URL} 
-            then
-              return 0
-            else
-              return 1
-            fi
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
 
 workflows:
-  say-hello-world-workflow:
+  setup-infra-workflow:
     jobs:
-      - say-hello
-      - say-world:
-          requires:
-            - say-hello
-      - another_job
+      - create_infra
       - smoke_test:
           requires:
-            - another_job
+            - create-infra
