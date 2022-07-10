@@ -50,16 +50,6 @@ jobs:
               return 1
             fi
 
-  # failing_job:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - run: exit 1
-  #     - run:
-  #       name: "on error"
-  #       command: echo "Hello Error!"
-  #       when: on_fail
-
 workflows:
   say-hello-world-workflow:
     jobs:
@@ -70,5 +60,4 @@ workflows:
       - another_job
       - smoke_test:
           requires:
-            - another-job
-      # - failing_job
+            - another_job
