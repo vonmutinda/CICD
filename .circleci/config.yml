@@ -14,7 +14,7 @@ commands:
           name: Destroy Environment
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name myStack
 jobs:
   say-hello:
     docker:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - print_pipeline_id:
           id: << pipeline.id >>
-  
+
   create_infra:
     docker:
       - image: amazon/aws-cli
@@ -50,7 +50,7 @@ jobs:
           name: Create Infra
           command: |
             aws cloudformation deploy \
-            --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
+            --stack-name myStack \
             --template-file template.yml  \
             --region=us-east-1
 
@@ -64,10 +64,10 @@ jobs:
           command: return 1
       - destroy_environment
 
-
-
 workflows:
   setup-infra-workflow:
     jobs:
       - create_infra
-      - smoke_test
+      - smoke_test:
+          requires:
+            - create_infra
