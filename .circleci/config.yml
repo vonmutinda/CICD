@@ -12,6 +12,7 @@ commands:
     steps:
       - run:
           name: Destroy Environment
+          when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name myStack
 jobs:
@@ -57,12 +58,11 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
-      - run: apk add --update curl
       - run:
           name: smoke test
-          command: return 1
-      - destroy_environment
-      when: on_fail
+          command: |
+            return 1
+      - destroy_environment 
 
 workflows:
   setup-infra-workflow:
